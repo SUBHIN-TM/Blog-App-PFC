@@ -29,13 +29,14 @@ const SetNewPassword = () => {
 
     const validation = () => {
         let counter = 0
-        if (!password) {
+        const Password=password.trim()
+        if (!Password.trim()) {
             setDisplayError((pvs) => ({
                 ...pvs,
                 passwordError: 'Please Fill The Field'
             }))
             counter++
-        } else if (password.length < 5 || password.length > 20) {
+        } else if (Password.length < 5 || Password.length > 20) {
             setDisplayError((pvs) => ({
                 ...pvs,
                 passwordError: 'Password Length Should be 5-20 Char'
