@@ -10,14 +10,12 @@ import { URL } from '../constants/links';
 const OtpVerification = () => {
     const [email, setEmail] = useState("")
     const [inputOtp, setInputOtp] = useState("")
-    const [emailError, setEmailError] = useState("")
-    const [otpError, setOtpError] = useState("")
-
     const [generatedOTP, setGeneratedOTP] = useState("")
     const [canResendOTP,setCanResendOTP]=useState(true)
     const [resendTimer,setResendTimer]=useState(60)
 
     const location=useLocation(); //IT IS USED TO FETCH THE OBJECT DATA FROM THE URL THAT REDIRECT FROM SIGN UP PAGE
+    const navigate=useNavigate()
 
     useEffect(() => {
         if (location?.state?.registeredEmail) { //TAKING THE TICKET ID NUMBER FROM THE ROUTE 
@@ -50,7 +48,6 @@ const OtpVerification = () => {
           }
           const otp = generateOTP()
           setGeneratedOTP(otp)
-        
           const response = await axios.post(`${URL}/sendOtp`,{ otp, email })
           if (response.data.message) {
             startResendTimer() //TIMER WILL ONLY START AFTER OTP SENT FROM SERVER
@@ -70,6 +67,17 @@ const OtpVerification = () => {
       }
 
 
+      const veriyingOTP=()=>{
+       if(generatedOTP == inputOtp){
+        toast.success("Email Verified successfully. Redirecting to Login Page...", {
+            onClose: () => {
+              navigate('/')
+            }
+          })
+       }else{
+        toast.error('Invalid OTP')
+       }
+      }
 
     return (
         <div className='loginDiv flex items-center justify-center h-screen'>
@@ -82,7 +90,7 @@ const OtpVerification = () => {
                     {(canResendOTP)? ( <Button  onClick={sendOtp} variant="contained" endIcon={<SendIcon />}>   Send </Button>) : ( <Button disabled  onClick={sendOtp} variant="contained" endIcon={<SendIcon />}>   Send </Button>)}
                     <span className='mx-2 font-medium'>{resendTimer} Seconds</span>
                     <TextField autoComplete="current-password" label="OTP" type="number" fullWidth margin="normal" name='otp' onChange={(e) => setInputOtp(e.target.value)} value={inputOtp} />
-                    {(canResendOTP)?( <Button disabled style={{ marginTop: '10px' }} variant="contained" color="primary" fullWidth className='mt-3'> Verify </Button>):( <Button  style={{ marginTop: '10px' }} variant="contained" color="primary" fullWidth className='mt-3'> Verify </Button>)}
+                    {(canResendOTP)?( <Button disabled style={{ marginTop: '10px' }} variant="contained" color="primary" fullWidth className='mt-3'> Verify </Button>):( <Button onClick={veriyingOTP}  style={{ marginTop: '10px' }} variant="contained" color="primary" fullWidth className='mt-3'> Verify </Button>)}
                    
                 </form>
             </Container>
