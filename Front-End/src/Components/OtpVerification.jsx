@@ -13,6 +13,7 @@ const OtpVerification = () => {
     const [generatedOTP, setGeneratedOTP] = useState("")
     const [canResendOTP,setCanResendOTP]=useState(true)
     const [resendTimer,setResendTimer]=useState(60)
+    const[isPageFromForgotPassword,setIsPageFromForgotPassword]=useState(false)
 
     const location=useLocation(); //IT IS USED TO FETCH THE OBJECT DATA FROM THE URL THAT REDIRECT FROM SIGN UP PAGE
     const navigate=useNavigate()
@@ -20,6 +21,9 @@ const OtpVerification = () => {
     useEffect(() => {
         if (location?.state?.registeredEmail) { //TAKING THE TICKET ID NUMBER FROM THE ROUTE 
             setEmail(location.state.registeredEmail)
+        }
+        if(location?.state?.fromForgotPassword){
+            setIsPageFromForgotPassword(true)
         }
       }, [location.state])
 
@@ -69,18 +73,30 @@ const OtpVerification = () => {
 
       const veriyingOTP=()=>{
        if(generatedOTP == inputOtp){
-        toast.success("Email Verified successfully. Redirecting to Login Page...", {
-            onClose: () => {
-              navigate('/')
-            }
-          })
+        if(isPageFromForgotPassword){
+            toast.success("Email Verified successfully. Redirecting to Password Setting Page...", {
+                onClose: () => {
+                  navigate('/setNewPassword',{
+                    state:{email}
+                  })
+                }
+              })
+        }else{
+            toast.success("Email Verified successfully. Redirecting to Login Page...", {
+                onClose: () => {
+                  navigate('/')
+                }
+              })
+        }
+       
        }else{
         toast.error('Invalid OTP')
        }
       }
 
     return (
-        <div className='loginDiv flex items-center justify-center h-screen'>
+        <div className='backgroundDiv'>
+        <div className='loginDiv flex items-center justify-center h-screen p-2'>
             <Container maxWidth="sm" className='border-2 border-black rounded-lg p-14'>
                 <Typography variant="h4" component="h1" gutterBottom align='center'>
                     Email Verification 
@@ -96,7 +112,7 @@ const OtpVerification = () => {
             </Container>
             <ToastContainer />
         </div>
-
+        </div>
     );
 };
 

@@ -47,35 +47,35 @@ const SignUp = () => {
         const response = await axios.post(`${URL}/signUp`, {
           userData: inputData
         })
-        if(response){
+        if (response) {
           setError("")
           console.log(response);
           toast.success("Registration successful. Redirecting to OTP Verificationpage...", {
             onClose: () => {
-              navigate('/otpVerification',{
-                state:{
-                  registeredEmail:inputData.email
+              navigate('/otpVerification', {
+                state: {
+                  registeredEmail: inputData.email
                 }
               })
             }
           })
         }
-        
+
 
       } catch (error) {
-        if(error.response){
-          const status=error.response.status
-          if(status=== 409){
-            if(error.response.data.isMailExist){
+        if (error.response) {
+          const status = error.response.status
+          if (status === 409) {
+            if (error.response.data.isMailExist) {
               setError("Email Already Exists")
-            }else if(error.response.data.isUserNameExist){
+            } else if (error.response.data.isUserNameExist) {
               setError("User Name Already Exists")
             }
           }
-        }else{
-          console.error("ERR",error);
+        } else {
+          console.error("ERR", error);
           setError('An error occurred during registration. Please try again.');
-        }     
+        }
       }
       finally {
         setIsLoading(false)
@@ -179,8 +179,9 @@ const SignUp = () => {
   }
 
   return (
-    <div className='loginDiv flex items-center justify-center h-screen'>
-      <Container maxWidth="sm" className='border-2 border-black rounded-lg p-14'>
+    <div className='backgroundDiv'>
+    <div className='loginDiv flex items-center justify-center h-screen  p-2'>
+      <Container maxWidth="sm" className='border-2 border-black rounded-lg p-14 '>
         <Typography variant="h4" component="h1" gutterBottom align='center'>
           Registration
         </Typography>
@@ -193,13 +194,13 @@ const SignUp = () => {
           <small className='text-red-500 m-2'>{displayError.passwordError}</small>
           <TextField autoComplete="current-password" label="Confirm Password" type="password" fullWidth margin="normal" name='confirmPassword' onChange={inputsGetting} value={inputData.confirmPassword} />
           <small className='text-red-500 m-2'>{displayError.confirmPasswordError}</small>
-         
+
           {error && (
-          <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
-            {error}
-          </Alert>
-        )}
-          
+            <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           {!isLoading && (
             <Button onClick={submit} style={{ marginTop: '10px' }} variant="contained" color="primary" fullWidth className='mt-3'>
               Login
@@ -211,7 +212,7 @@ const SignUp = () => {
       </Container>
       <ToastContainer />
     </div>
-    
+    </div>
 
   );
 };
