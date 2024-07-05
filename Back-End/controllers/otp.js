@@ -21,5 +21,28 @@ export const sendOtp=async(req,res)=>{
         }
     } catch (error) {
         console.error(error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+}
+
+
+
+export const otpVerified=async(req,res)=>{
+    try {
+        console.log("OTP Verified Section");
+        console.log(req.body);
+        const email=req.body.email
+        const response=await USER.findOneAndUpdate({email:email},
+            { $set:{isVerified:true}},
+            {new:true}
+         )
+         if(response){
+            console.log("verfied and marked in db");
+            return res.status(200).json({verified:true})
+         }
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });  
     }
 }

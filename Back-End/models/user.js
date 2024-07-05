@@ -5,7 +5,6 @@ const userSchema=new mongoose.Schema({
     userName:{type:String,required: true, unique: true},
     password:{type:String ,required: true},
     isVerified: { type: Boolean, default: false },
-    otp:{type:Number}
 },{versionKey:false,timestamps:true})
 
 const USER=mongoose.model('User',userSchema,'User')
