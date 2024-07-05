@@ -86,7 +86,7 @@ const SetNewPassword = () => {
                 if(response.data){
                     toast.success(response.data.message,{
                         onClose:()=>{
-                            navigate('/')
+                            navigate('/login')
                         }
                     })
                 }else{

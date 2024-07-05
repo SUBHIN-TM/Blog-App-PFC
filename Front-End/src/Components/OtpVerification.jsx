@@ -87,7 +87,7 @@ const OtpVerification = () => {
             if(response.data.verified){
               toast.success("Email Verified successfully. Redirecting to Login Page...", {
                 onClose: () => {
-                  navigate('/')
+                  navigate('/login')
                 }
               })
             }

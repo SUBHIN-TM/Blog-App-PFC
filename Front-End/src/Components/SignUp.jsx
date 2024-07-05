@@ -207,7 +207,7 @@ const SignUp = () => {
             </Button>
           )}
 
-          <p onClick={() => navigate('/')} className='italic mt-3 cursor-pointer hover:text-blue-500 hover:underline'>Back To Login Page ⬅️</p>
+          <p onClick={() => navigate('/login')} className='italic mt-3 cursor-pointer hover:text-blue-500 hover:underline'>Back To Login Page ⬅️</p>
         </form>
       </Container>
       <ToastContainer />

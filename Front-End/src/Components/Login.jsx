@@ -1,5 +1,5 @@
 import { Button, TextField, Container, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +8,13 @@ import { URL } from '../constants/links';
 
 
 const Login = () => {
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+    if (token) {
+        navigate('/')
+    }
+  },[])
 
   const [inputData, setInputData] = useState({
     email: '',
@@ -106,7 +113,7 @@ const Login = () => {
       if(response.data.token){
         localStorage.setItem('token',response.data.token);
         console.log('Token stored in local storage:', response.data.token);
-        navigate('/home')
+        navigate('/')
       }
      
      } catch (error) {
@@ -152,7 +159,8 @@ const Login = () => {
             <Button onClick={submit} style={{ marginTop: '10px' }} variant="contained" color="primary" fullWidth className='mt-3'>
               Login
             </Button>
-            <p onClick={() => navigate('/signUp')} className=' mt-4 cursor-pointer hover:text-blue-500 hover:underline'>Create Your Account ➡️</p>
+            <p onClick={() => navigate('/signUp')} className=' mt-4 cursor-pointer hover:text-blue-500 hover:underline'>Create Your Account 🪧</p>
+            <p onClick={() => navigate('/')} className='mt-2 cursor-pointer hover:text-blue-500 hover:underline'>Back To Home ⬅️</p>
             <p onClick={forgotPassword} className=' mt-2 cursor-pointer hover:text-red-500 hover:underline'>Forgot Password❗</p>
           </form>
         </Container>
