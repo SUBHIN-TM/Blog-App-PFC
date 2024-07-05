@@ -4,9 +4,13 @@ import { URL } from "../constants/links"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { confirmAlert } from 'react-confirm-alert'; // Import react-confirm-alert module
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const Myposts = () => {
     const [isModal, setIsmodal] = useState(false)  //STATE FOR MODAL OPEN AND CLOSE
+    const [isEditModal,setIsEditModal]=useState(false)
+    const[editPostId,setEditPostId]=useState("")
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
     const [titleError, setTitleError] = useState("")
@@ -14,7 +18,7 @@ const Myposts = () => {
     const [myPosts, setMyPosts] = useState("")
     const navigate = useNavigate()
     const [waiting, setWaiting] = useState(false) //THIS WILL TRIGGER EVERY AXIOS ACTIONS SO USEEFFECT CAN USE BY THIS LOGIC
-
+    
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -95,21 +99,60 @@ const Myposts = () => {
         }
     }
 
-    const deletePost=async (postId)=>{
-        try {
-            setWaiting(true)
-            const response=await axios.delete(`${URL}/deletePost/${postId}`)
-            if(response.data){
-                toast.success(response.data.message)
+
+
+
+
+    const deletePost = async (postId) => {
+        confirmAlert({
+            title: 'Confirm Delete',
+            message: 'Are you sure you want to delete the post?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        deleteProceed()
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                        return
+
+                    }
+                }
+            ]
+        });
+
+        const deleteProceed = async () => {
+            try {
+                setWaiting(true)
+                const response = await axios.delete(`${URL}/deletePost/${postId}`)
+                if (response.data) {
+                    toast.success(response.data.message)
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error('An error occurred during Delete post. Please try again.');
+            } finally {
+                setWaiting(false)
             }
-        } catch (error) {
-            console.error(error);
-            toast.error('An error occurred during Delete post. Please try again.');
-        }finally{
-            setWaiting(false)
         }
     }
 
+
+    const editModal = async (postId,title,content) => {  
+            setIsmodal(true)
+            setIsEditModal(true)
+            setTitle(title)
+            setContent(content)
+            setEditPostId(postId)
+    }
+
+    
+    const editPost=()=>{
+    console.log(editPostId,title,content);
+    }
 
     return (
         <div className='min-h-screen'>
@@ -128,7 +171,9 @@ const Myposts = () => {
                             </div>
                             <div className="mt-2 flex justify-end">
                                 <button className="border bg-gray-600 text-white font-semibold px-3 py-1 mr-2 hover:bg-red-600" onClick={() => cancel()}>Cancel</button>
-                                <button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={submit}>Post</button>
+                                {isEditModal?(<button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={editPost}>Edit</button>):
+                                (<button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={submit}>Post</button>)}
+                
                             </div>
                         </div>
                     </div>
@@ -142,8 +187,8 @@ const Myposts = () => {
                             <h2 className="text-2xl font-bold underline mb-4">{data.title}</h2>
                             <div className="italic">{data.content}</div>
                             <div className="flex gap-4 mt-3">
-                                <button onClick={()=>deletePost(data._id)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-red-600">Delete</button>
-                                <button className="p-1 px-2 border bg-gray-600 text-white hover:bg-orange-500">Edit</button>
+                                <button onClick={() => deletePost(data._id)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-red-600">Delete</button>
+                                <button onClick={() => editModal(data._id,data.title,data.content)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-orange-500">Edit</button>
                             </div>
                         </div>
                     ))
