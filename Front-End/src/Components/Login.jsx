@@ -103,9 +103,35 @@ const Login = () => {
         email: inputData.email,
         password: inputData.password
       })
-      console.log(response);
+      if(response.data.token){
+        localStorage.setItem('token',response.data.token);
+        console.log('Token stored in local storage:', response.data.token);
+        navigate('/home')
+      }
+     
      } catch (error) {
-      console.error(error);
+      if(error.response.status==400 ){
+        setDisplayError((pvs)=>({
+          ...pvs,
+          passwordError:error.response.data.message
+        }))
+      }else if(error.response.status== 404){
+        setDisplayError((pvs)=>({
+          ...pvs,
+          emailError:error.response.data.message
+        }))
+      } else if(error.response.status== 401){
+      toast.error(error.response.data.message,{
+        onClose: ()=>{
+          navigate('/otpVerification')
+        }
+      })
+      }
+      else{
+        console.error(error);
+        toast.error('An error occurred during Login. Please try again.');
+      }
+     
      }
     }
   }
@@ -119,7 +145,7 @@ const Login = () => {
             Login
           </Typography>
           <form>
-            <TextField label="Email" autoComplete='current-name' type="email" fullWidth margin="normal" onChange={inputsGetting} name='email' value={inputData.email} />
+            <TextField label="Email" autoComplete='current-email' type="email" fullWidth margin="normal" onChange={inputsGetting} name='email' value={inputData.email} />
             <small className='text-red-500 m-2'>{displayError.emailError}</small>
             <TextField autoComplete="current-password" label="Password" type="password" fullWidth margin="normal" name='password' onChange={inputsGetting} value={inputData.password} />
             <small className='text-red-500 m-2'>{displayError.passwordError}</small>

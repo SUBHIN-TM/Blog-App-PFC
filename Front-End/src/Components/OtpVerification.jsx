@@ -71,7 +71,7 @@ const OtpVerification = () => {
       }
 
 
-      const veriyingOTP=()=>{
+      const veriyingOTP=async()=>{
        if(generatedOTP == inputOtp){
         if(isPageFromForgotPassword){
             toast.success("Email Verified successfully. Redirecting to Password Setting Page...", {
@@ -82,11 +82,20 @@ const OtpVerification = () => {
                 }
               })
         }else{
-            toast.success("Email Verified successfully. Redirecting to Login Page...", {
+          try {
+            const response=await axios.post(`${URL}/Otpverified`,{email})
+            if(response.data.verified){
+              toast.success("Email Verified successfully. Redirecting to Login Page...", {
                 onClose: () => {
                   navigate('/')
                 }
               })
+            }
+          } catch (error) {
+            console.error(error);
+            toast.error('An error occurred during Verification. Please try again.')
+          }
+            
         }
        
        }else{
