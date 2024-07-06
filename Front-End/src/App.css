@@ -3,7 +3,7 @@ input{
 }
 
 .backgroundDiv{
-    /* background:linear-gradient(60deg, #ffffff9e, #bab1b1be) */
+    background:linear-gradient(60deg, #ffffff9e, #666363ac)
 }
 
 .modal-overlay {
