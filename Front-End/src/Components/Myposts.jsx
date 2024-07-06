@@ -4,36 +4,37 @@ import { URL } from "../constants/links"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { confirmAlert } from 'react-confirm-alert'; // Import react-confirm-alert module
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import { ClipLoader } from 'react-spinners';
 
 
 const Myposts = () => {
     const [isModal, setIsmodal] = useState(false)  //STATE FOR MODAL OPEN AND CLOSE
-    const [isEditModal, setIsEditModal] = useState(false)
-    const [editPostId, setEditPostId] = useState("")
-    const [title, setTitle] = useState("")
-    const [content, setContent] = useState("")
-    const [titleError, setTitleError] = useState("")
-    const [contentError, setContentError] = useState("")
-    const [myPosts, setMyPosts] = useState("")
-    const navigate = useNavigate()
+    const [isEditModal, setIsEditModal] = useState(false) // STATE FOR POST MODAL CONVERT TO EDIT MODAL , SAME MODAL USED FOR POST AND EDIT
+    const [editPostId, setEditPostId] = useState("") //STORE THE ID OF POST WHICH SHOULD BE UPDATED
+    const [title, setTitle] = useState("") //STORE INPUT FIELD VALUE OF USER
+    const [content, setContent] = useState("") //STORE INPUT FIELD VALUE OF USER
+    const [titleError, setTitleError] = useState("") //DISPLAY ERROR
+    const [contentError, setContentError] = useState("") //DISPLAY ERROR
+    const [myPosts, setMyPosts] = useState("") //STORE THE USER POSTED BLOGS IN THIS STATE
     const [waiting, setWaiting] = useState(false) //THIS WILL TRIGGER EVERY AXIOS ACTIONS SO USEEFFECT CAN USE BY THIS LOGIC
     const [loading,setLoading]=useState(false)  //THIS IS FOR TO DISPLAY SPINNERS WHILE FETCHING
+    const navigate = useNavigate() 
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); //IT CHECK WHEATHER THE TOKEN EXIST OR NOT , BECASUSE ONLY LOGINED USERS CAN ACCESS THIS
         if (!token) {
             navigate('/login')
         } else {
-            fetchMyPosts()
+            fetchMyPosts()  //IF TOKEN EXISTS FETCHING THE LOGED USER BLOG POSTS
         }
     }, [waiting])
 
-    const fetchMyPosts = async () => {
+
+    const fetchMyPosts = async () => { //FUNCTION FOR FETCHING LOGINED USER BLOGS
         try {
-            setLoading(true)
+            setLoading(true) //TO TRIGGER THE SPINNEERS
             const response = await axios.get(`${URL}/myPosts`)
             if (response) {
                 setMyPosts(response.data.myPosts)
@@ -46,7 +47,7 @@ const Myposts = () => {
         }
     }
 
-    console.log(myPosts);
+   
     const modalOpen = () => { //MODAL TOGGLE VIEW FUNCTION
         if (isModal) {
             setIsmodal(false)
@@ -55,13 +56,13 @@ const Myposts = () => {
         }
     }
 
-    const cancel = () => {
+    const cancel = () => { //IF THE POST WANT TO CANCEL ,IT WILL CLEAR ALL
         setIsmodal(false)
         setTitle("")
         setContent("")
     }
 
-    const validation = () => {
+    const validation = () => { //VALIDATION FOR INPUT FIELDS
         let couter = 0
         let Title = title.trim()
         let Content = content.trim()
@@ -84,7 +85,8 @@ const Myposts = () => {
         }
     }
 
-    const submit = async () => {
+
+    const submit = async () => { //IF VALIDATION SUCCESS THEN IT PROCEED CREATE POST
         const isValidated = validation()
         if (isValidated) {
             try {
@@ -93,7 +95,6 @@ const Myposts = () => {
                 if (response) {
                     toast.success(response.data.message)
                     cancel()
-
                 }
             } catch (error) {
                 console.error(error);
@@ -109,14 +110,14 @@ const Myposts = () => {
 
 
 
-    const deletePost = async (postId) => {
+    const deletePost = async (postId) => { //AFTER PERFORM DELETE BUTTON IT REQUIRES CONFIRMATION
         confirmAlert({
             title: 'Confirm Delete',
             message: 'Are you sure you want to delete the post?',
             buttons: [
                 {
                     label: 'Yes',
-                    onClick: () => {
+                    onClick: () => {  //IF CONFIRMED DELETION IT WIL PROCEED
                         deleteProceed()
                     }
                 },
@@ -124,13 +125,13 @@ const Myposts = () => {
                     label: 'No',
                     onClick: () => {
                         return
-
                     }
                 }
             ]
         });
 
-        const deleteProceed = async () => {
+
+        const deleteProceed = async () => { //DELETE POST FUNCION
             try {
                 setWaiting(true)
                 const response = await axios.delete(`${URL}/deletePost/${postId}`)
@@ -147,21 +148,21 @@ const Myposts = () => {
     }
 
 
-    const editModal = async (postId, title, content) => {
-        setIsmodal(true)
-        setIsEditModal(true)
+
+    const editModal = async (postId, title, content) => { //EDIT BUTTON
+        setIsmodal(true) //OPEN THE MODAL BY GETTING TRUE
+        setIsEditModal(true) //POST MODAL BUTTON CHANGE TO EDIT BUTTON
         setTitle(title)
         setContent(content)
-        setEditPostId(postId)
+        setEditPostId(postId) //IT WILL WRITE THE POST ID TO EDIT
     }
 
 
-    const editPost = async () => {
+    const editPost = async () => { //EDIT POST FUNCTION
         const isValidated = validation()
         if(isValidated){
             try {
                 setWaiting(true)
-                // console.log(editPostId,title,content);
                 const response = await axios.put(`${URL}/editPost/${editPostId}`, { title, content })
                 if(response){
                     toast.success(response.data.message)
@@ -178,8 +179,7 @@ const Myposts = () => {
         }
     }
 
-    if(loading){
-        console.log("waiting");
+    if(loading){ //IF LOADING IT WILL DISPLAY SPINNER
         return (
             <div className="min-h-screen flex justify-center items-center">
                <ClipLoader color="#000000" size={100} />

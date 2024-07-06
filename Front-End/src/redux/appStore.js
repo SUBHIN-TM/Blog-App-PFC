@@ -4,7 +4,7 @@ import blogAppReducer from "./blogAppReducer";
 
 const appStore=configureStore({
     reducer:{
-        BlogAppDataBase:blogAppReducer,
+        BlogAppDataBase:blogAppReducer, //STORE NAME AND ITS REDUCERS
     }
 })
 

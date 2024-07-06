@@ -23,7 +23,7 @@ const SignUp = () => {
     confirmPasswordError: ''
   })
 
-  const [error, setError] = useState("")
+  const [error, setError] = useState("")  //FOR COMMON ERROR
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -36,57 +36,7 @@ const SignUp = () => {
   }
 
 
-
-  const submit = async (e) => { //FORM SUBMISSION
-    e.preventDefault();
-    // console.log(inputData);
-    const isvalid = validation()//IF THE VALIDATION RETURN TRUE IT WILL SEND THE FORM
-    if (isvalid) {
-      try {
-        setIsLoading(true)
-        const response = await axios.post(`${URL}/signUp`, {
-          userData: inputData
-        })
-        if (response) {
-          setError("")
-          console.log(response);
-          toast.success("Registration successful. Redirecting to OTP Verificationpage...", {
-            onClose: () => {
-              navigate('/otpVerification', {
-                state: {
-                  registeredEmail: inputData.email
-                }
-              })
-            }
-          })
-        }
-
-
-      } catch (error) {
-        if (error.response) {
-          const status = error.response.status
-          if (status === 409) {
-            if (error.response.data.isMailExist) {
-              setError("Email Already Exists")
-            } else if (error.response.data.isUserNameExist) {
-              setError("User Name Already Exists")
-            }
-          }
-        } else {
-          console.error("ERR", error);
-          setError('An error occurred during registration. Please try again.');
-        }
-      }
-      finally {
-        setIsLoading(false)
-      }
-    }
-  }
-
-
-
-
-  const validation = () => {
+  const validation = () => { //SIGNUP FORM VALIDATON
     const email = inputData.email.trim()
     const password = inputData.password.trim()
     const confirmPassword = inputData.confirmPassword.trim()
@@ -113,8 +63,6 @@ const SignUp = () => {
         emailError: ''
       }))
     }
-
-
     if (!password) {
       setDisplayError((pvs) => ({
         ...pvs,
@@ -177,6 +125,56 @@ const SignUp = () => {
       return false
     }
   }
+
+  
+
+  const submit = async (e) => { //FORM SUBMISSION SIGNUP
+    e.preventDefault();
+    const isvalid = validation()//IF THE VALIDATION RETURN TRUE IT WILL SEND THE FORM
+    if (isvalid) {
+      try {
+        setIsLoading(true)
+        const response = await axios.post(`${URL}/signUp`, {
+          userData: inputData
+        })
+        if (response) {
+          setError("")
+          console.log(response);
+          toast.success("Registration successful. Redirecting to OTP Verificationpage...", {
+            onClose: () => {
+              navigate('/otpVerification', {
+                state: {
+                  registeredEmail: inputData.email
+                }
+              })
+            }
+          })
+        }
+      } catch (error) {
+        if (error.response) {
+          const status = error.response.status
+          if (status === 409) {
+            if (error.response.data.isMailExist) {
+              setError("Email Already Exists")
+            } else if (error.response.data.isUserNameExist) {
+              setError("User Name Already Exists")
+            }
+          }
+        } else {
+          console.error("ERR", error);
+          setError('An error occurred during registration. Please try again.');
+        }
+      }
+      finally {
+        setIsLoading(false)
+      }
+    }
+  }
+
+
+
+
+ 
 
   return (
     <div className='backgroundDiv'>

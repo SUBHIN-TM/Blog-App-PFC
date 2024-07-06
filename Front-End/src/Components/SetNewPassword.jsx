@@ -8,17 +8,19 @@ import { URL } from '../constants/links';
 
 
 const SetNewPassword = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const location = useLocation();
+    const [email, setEmail] = useState("")  //INPUT FIELD STATE
+    const [password, setPassword] = useState("") //INPUT FIELD STATE
+    const [confirmPassword, setConfirmPassword] = useState("") //INPUT FIELD STATE
+    const location = useLocation(); 
     const navigate=useNavigate()
+
     const [displayError, setDisplayError] = useState({ //FOR DISPLAYING ERRORS 
         passwordError: '',
         confirmPasswordError: ''
     })
 
-    useEffect(() => {
+
+    useEffect(() => { //IF THE COMING ROUTE HAS EMAIL IT WILL AUTO FILLED
         if (location?.state?.email) {
             setEmail(location?.state?.email)
         }
@@ -27,7 +29,7 @@ const SetNewPassword = () => {
 
 
 
-    const validation = () => {
+    const validation = () => {  //VALIDATION FOR NEW PASSWORD
         let counter = 0
         const Password=password.trim()
         if (!Password.trim()) {
@@ -76,12 +78,11 @@ const SetNewPassword = () => {
     }
 
 
-    const submit = async (e) => {
+    const submit = async (e) => {  //AFTER VALIDATION THE RESET PASSWORD WILL PROCEED
         e.preventDefault()
         const isvalid = validation()
         if(isvalid){
             try {
-                console.log(email,password);
                 const response=await axios.post(`${URL}/resetPassword`,{email,newPassword:password})
                 if(response.data){
                     toast.success(response.data.message,{

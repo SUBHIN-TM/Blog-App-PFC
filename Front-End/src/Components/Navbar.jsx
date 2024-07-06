@@ -5,17 +5,18 @@ import { useNavigate } from 'react-router-dom'
 
 
 const Navbar = () => {
-  const [isLogined, setIsLogined] = useState(false)
+  const [isLogined, setIsLogined] = useState(false) //IT WILL TRIGGER THE LOGOUT LOGIN BUTTON NAME
   const navigate = useNavigate()
 
-  useEffect(() => {
+  useEffect(() => { //IF LOGINED BUTTON SHOULD SHOW LOGOUT
     const token = localStorage.getItem('token');
     if (token) {
       setIsLogined(true);
     }
   }, []);
 
-  const logout = () => {
+
+  const logout = () => { //LOG OUT FUNCTION
     localStorage.removeItem('token');
     window.location.reload()
   }

@@ -8,15 +8,16 @@ import { URL } from '../constants/links';
 
 
 const Login = () => {
+  const navigate = useNavigate()
 
-  useEffect(()=>{
+  useEffect(()=>{ //IF THE USER LOGGED THERE SHOULD HAVE TOKEN IN LOCAL STORAGE, IF IT PRESENT NOT SHOW THE LOGIN PAGE AGAIN IT WILL BE DIRECTED TO HOMEPAGE
     const token = localStorage.getItem('token');
     if (token) {
         navigate('/')
     }
   },[])
 
-  const [inputData, setInputData] = useState({
+  const [inputData, setInputData] = useState({ //CREATED STATE FOR SAVING THE USER INPUTS 
     email: '',
     password: ''
   })
@@ -26,10 +27,9 @@ const Login = () => {
     passwordError: '',
   })
 
-  const navigate = useNavigate()
+ 
 
-
-  const inputsGetting = (e) => {
+  const inputsGetting = (e) => { //IT WILL  SAVE THE INPUTS FOR CORRESPONDING NAME WITH VALUE (EMAIL AND PASSWORD)
     const { name, value } = e.target;
     setInputData((pvs) => ({
       ...pvs,
@@ -39,7 +39,7 @@ const Login = () => {
 
 
 
-  const forgotPassword = () => {
+  const forgotPassword = () => { //FORGOT PASSWORD BUTTON REDIRECT TO OTP VERIFICATION, USER CAN ONLY SET THE NEW PASSWORD AFTER OTP VERIFICATION
     navigate('/otpVerification', {
       state: {
         fromForgotPassword: true
@@ -48,7 +48,7 @@ const Login = () => {
   }
 
 
-  const validation = () => {
+  const validation = () => { //CALLED FORM VALIDATIONS IF IT RETURN TRUE IT WILL SEND TO BACKEND OTHER WISE ITS NOT
     const email = inputData.email.trim()
     const password = inputData.password.trim()
 
@@ -101,7 +101,7 @@ const Login = () => {
   }
 
 
-  const submit = async (e) => {
+  const submit = async (e) => { //AFTER PROPER VALIDATON THE LOGIN PAGE GET THE INPUT DATA AND SEND TO BACKEND
     e.preventDefault()
     const isValid = validation()
     if (isValid) {
@@ -110,9 +110,8 @@ const Login = () => {
         email: inputData.email,
         password: inputData.password
       })
-      if(response.data.token){
+      if(response.data.token){ //AFTER GETTING RESPONSE TAKE TOKEN FROM RESPONSE AND PUT IT INTO THE LOCAL STORAGE
         localStorage.setItem('token',response.data.token);
-        console.log('Token stored in local storage:', response.data.token);
         navigate('/')
       }
      

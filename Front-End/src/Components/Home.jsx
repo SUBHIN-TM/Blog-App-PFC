@@ -9,15 +9,16 @@ import { ClipLoader } from 'react-spinners';
 
 
 const Home = () => {
-  const allBlogs = useSelector((store) => store.BlogAppDataBase.blogPosts)
+  const allBlogs = useSelector((store) => store.BlogAppDataBase.blogPosts) //REDUX STATE TO STORE ALL THE BLOG POSTS
   const dispath = useDispatch()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)  //USED FOR TRIGER SPINNERS
 
-  useEffect(() => {
+  useEffect(() => { //CALLED THE FETCH FUCTION ONCE IT MOUNTED
     fetchAll()
   }, [])
 
-  const fetchAll = async () => {
+
+  const fetchAll = async () => { //ONCE HOME IS RENDERED CALL FOR BACKEND TO FETCH ALL THE BLOG POST AND IT STROE IN THE REDUX
     setLoading(true)
     try {
       const response = await axios.get(`${URL}`)
@@ -25,7 +26,6 @@ const Home = () => {
         // console.log(response.data.allPosts);
         dispath(fetchDetails(response.data.allPosts))
       }
-
     } catch (error) {
       console.error(error);
       toast.error('An error occurred during Fetching all posts. Please try again.');
@@ -36,7 +36,7 @@ const Home = () => {
 
 
 
-  if (loading || !allBlogs) {
+  if (loading || !allBlogs) {   //IF LOADING , THE SPINNER WILL BE RENDERED AS OUTPUT
     return (
       <div className="min-h-screen flex justify-center items-center">
          <ClipLoader color="#000000" size={100} />
@@ -45,16 +45,14 @@ const Home = () => {
   }
 
 
-  const formatUserName = (userName) => {
+  const formatUserName = (userName) => { //FUNCTION TO DISPLAY THE FIRST CHARACTER IS CAPITAL AND REMAINS SMALL LETTERS
     if (userName) {
       return userName?.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
     }
-
   }
 
   return (
     <div className="min-h-screen">
-
       <div className="min-h-screen bg-gray-100 py-8">
         <div className="max-w-4xl mx-auto">
           {allBlogs ? (
