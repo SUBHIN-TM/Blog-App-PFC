@@ -30,17 +30,11 @@ const Myposts = () => {
         }
     }, [waiting])
 
-   if(myPosts){
-    console.log("post exist");
-   }else{
-    console.log("no post");
-   }
-   
+
     const fetchMyPosts = async () => { //FUNCTION FOR FETCHING LOGINED USER BLOGS
         try {
             const response = await axios.get(`${URL}/myPosts`)
             if (response) {
-                console.log("response",response.data.myPosts);
                 setMyPosts(response.data.myPosts)
             }
         } catch (error) {
