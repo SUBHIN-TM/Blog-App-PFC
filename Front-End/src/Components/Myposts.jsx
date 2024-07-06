@@ -9,8 +9,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const Myposts = () => {
     const [isModal, setIsmodal] = useState(false)  //STATE FOR MODAL OPEN AND CLOSE
-    const [isEditModal,setIsEditModal]=useState(false)
-    const[editPostId,setEditPostId]=useState("")
+    const [isEditModal, setIsEditModal] = useState(false)
+    const [editPostId, setEditPostId] = useState("")
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
     const [titleError, setTitleError] = useState("")
@@ -18,7 +18,7 @@ const Myposts = () => {
     const [myPosts, setMyPosts] = useState("")
     const navigate = useNavigate()
     const [waiting, setWaiting] = useState(false) //THIS WILL TRIGGER EVERY AXIOS ACTIONS SO USEEFFECT CAN USE BY THIS LOGIC
-    
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -141,17 +141,35 @@ const Myposts = () => {
     }
 
 
-    const editModal = async (postId,title,content) => {  
-            setIsmodal(true)
-            setIsEditModal(true)
-            setTitle(title)
-            setContent(content)
-            setEditPostId(postId)
+    const editModal = async (postId, title, content) => {
+        setIsmodal(true)
+        setIsEditModal(true)
+        setTitle(title)
+        setContent(content)
+        setEditPostId(postId)
     }
 
+
+    const editPost = async () => {
+        const isValidated = validation()
+        if(isValidated){
+            try {
+                setWaiting(true)
+                // console.log(editPostId,title,content);
+                const response = await axios.put(`${URL}/editPost/${editPostId}`, { title, content })
+                if(response){
+                    toast.success(response.data.message)
+                    cancel()
+                }
     
-    const editPost=()=>{
-    console.log(editPostId,title,content);
+            } catch (error) {
+                console.error(error);
+                toast.error('An error occurred during Edit post. Please try again.');
+            }
+            finally {
+                setWaiting(false)
+            }
+        }
     }
 
     return (
@@ -171,9 +189,9 @@ const Myposts = () => {
                             </div>
                             <div className="mt-2 flex justify-end">
                                 <button className="border bg-gray-600 text-white font-semibold px-3 py-1 mr-2 hover:bg-red-600" onClick={() => cancel()}>Cancel</button>
-                                {isEditModal?(<button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={editPost}>Edit</button>):
-                                (<button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={submit}>Post</button>)}
-                
+                                {isEditModal ? (<button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={editPost}>Edit</button>) :
+                                    (<button className="border bg-blue-600 text-white font-semibold px-3 py-1 hover:bg-green-500" onClick={submit}>Post</button>)}
+
                             </div>
                         </div>
                     </div>
@@ -188,7 +206,7 @@ const Myposts = () => {
                             <div className="italic">{data.content}</div>
                             <div className="flex gap-4 mt-3">
                                 <button onClick={() => deletePost(data._id)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-red-600">Delete</button>
-                                <button onClick={() => editModal(data._id,data.title,data.content)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-orange-500">Edit</button>
+                                <button onClick={() => editModal(data._id, data.title, data.content)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-orange-500">Edit</button>
                             </div>
                         </div>
                     ))
