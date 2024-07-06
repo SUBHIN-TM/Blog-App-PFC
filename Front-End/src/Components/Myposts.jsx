@@ -89,6 +89,7 @@ const Myposts = () => {
     const submit = async () => { //IF VALIDATION SUCCESS THEN IT PROCEED CREATE POST
         const isValidated = validation()
         if (isValidated) {
+            setWaiting(true)
             try {
                 const response = await axios.post(`${URL}/contentPost`, { content, title })
                 if (response) {
@@ -99,7 +100,9 @@ const Myposts = () => {
                 console.error(error);
                 toast.error('An error occurred during post add. Please try again.');
 
-            } 
+            } finally{
+                setWaiting(false)
+            }
         }
     }
 
@@ -130,6 +133,7 @@ const Myposts = () => {
 
         const deleteProceed = async () => { //DELETE POST FUNCION
             try {
+                setWaiting(true)
                 const response = await axios.delete(`${URL}/deletePost/${postId}`)
                 if (response.data) {
                     toast.success(response.data.message)
@@ -137,7 +141,9 @@ const Myposts = () => {
             } catch (error) {
                 console.error(error);
                 toast.error('An error occurred during Delete post. Please try again.');
-            } 
+            }finally{
+                setWaiting(false)
+            }
         }
     }
 
@@ -155,10 +161,11 @@ const Myposts = () => {
     const editPost = async () => { //EDIT POST FUNCTION
         const isValidated = validation()
         if(isValidated){
+            setWaiting(true)
             try {
                 const response = await axios.put(`${URL}/editPost/${editPostId}`, { title, content })
                 if(response){
-                    setWaiting(false)
+                   
                     toast.success(response.data.message)
                     cancel()
                 }
@@ -166,18 +173,20 @@ const Myposts = () => {
             } catch (error) {
                 console.error(error);
                 toast.error('An error occurred during Edit post. Please try again.');
+            }finally{
+                setWaiting(false)
             }
            
         }
     }
 
-    if(loading){ //IF LOADING IT WILL DISPLAY SPINNER
-        return (
-            <div className="min-h-screen flex justify-center items-center">
-               <ClipLoader color="#000000" size={100} />
-            </div>
-          )
-    }
+    // if(loading){ //IF LOADING IT WILL DISPLAY SPINNER
+    //     return (
+    //         <div className="min-h-screen flex justify-center items-center">
+    //            <ClipLoader color="#000000" size={100} />
+    //         </div>
+    //       )
+    // }
 
     return (
         <div className='min-h-screen'>
