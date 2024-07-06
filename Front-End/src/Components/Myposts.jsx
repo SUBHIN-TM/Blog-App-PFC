@@ -90,7 +90,6 @@ const Myposts = () => {
         const isValidated = validation()
         if (isValidated) {
             try {
-                setWaiting(true)
                 const response = await axios.post(`${URL}/contentPost`, { content, title })
                 if (response) {
                     toast.success(response.data.message)
@@ -100,9 +99,7 @@ const Myposts = () => {
                 console.error(error);
                 toast.error('An error occurred during post add. Please try again.');
 
-            } finally {
-                setWaiting(false)
-            }
+            } 
         }
     }
 
@@ -133,7 +130,6 @@ const Myposts = () => {
 
         const deleteProceed = async () => { //DELETE POST FUNCION
             try {
-                setWaiting(true)
                 const response = await axios.delete(`${URL}/deletePost/${postId}`)
                 if (response.data) {
                     toast.success(response.data.message)
@@ -141,9 +137,7 @@ const Myposts = () => {
             } catch (error) {
                 console.error(error);
                 toast.error('An error occurred during Delete post. Please try again.');
-            } finally {
-                setWaiting(false)
-            }
+            } 
         }
     }
 
@@ -162,9 +156,9 @@ const Myposts = () => {
         const isValidated = validation()
         if(isValidated){
             try {
-                setWaiting(true)
                 const response = await axios.put(`${URL}/editPost/${editPostId}`, { title, content })
                 if(response){
+                    setWaiting(false)
                     toast.success(response.data.message)
                     cancel()
                 }
@@ -173,9 +167,7 @@ const Myposts = () => {
                 console.error(error);
                 toast.error('An error occurred during Edit post. Please try again.');
             }
-            finally {
-                setWaiting(false)
-            }
+           
         }
     }
 
@@ -217,8 +209,10 @@ const Myposts = () => {
                 {myPosts ? (
                     myPosts.map((data) => (
                         <div key={data._id} className="bg-white  p-6 rounded-lg shadow-md mb-6">
+                            
                             <h2 className="text-2xl font-bold underline mb-4">{data.title}</h2>
                             <div className="italic">{data.content}</div>
+                            <p className="text-gray-500 text-sm my-2">{new Date(data.createdAt).toLocaleDateString()}</p>
                             <div className="flex gap-4 mt-3">
                                 <button onClick={() => deletePost(data._id)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-red-600">Delete</button>
                                 <button onClick={() => editModal(data._id, data.title, data.content)} className="p-1 px-2 border bg-gray-600 text-white hover:bg-orange-500">Edit</button>
