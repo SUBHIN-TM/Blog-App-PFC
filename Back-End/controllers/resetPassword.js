@@ -1,7 +1,7 @@
 import USER from "../models/user.js";
 import bcrypt from 'bcrypt'
 
-const resetPassword=async(req,res)=>{
+const resetPassword=async(req,res)=>{  //RESET PASSWORD CONTROLLER
 try {
     console.log("reset password section");
     // console.log(req.body);

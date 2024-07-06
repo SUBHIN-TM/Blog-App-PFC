@@ -11,14 +11,14 @@ const login=async(req,res)=>{
         // console.log(req.body);
         const {email,password}=req.body
         const user=await USER.findOne({email})
-        if(user){
+        if(user){ //IF THE MAIL REGISTERED IT WILL CHECK THE PASSWORD
         const isPasswordMatch=await bcrypt.compare(password,user.password)
-        if(!isPasswordMatch){
+        if(!isPasswordMatch){ //PASSWORD MISS MATCH ERROR
             return res.status(400).json({message:'Password Mismatch'})
-        }else if(!user.isVerified){
+        }else if(!user.isVerified){//IF USER REGISTERED BUT NOT VERIFIED EMAIL OTP
           return res.status(401).json({message:'Email Not Verified Redirect to Verification Page'})
         }
-        else{
+        else{ //IF THE USER IS GENUINE
             const payload={id:user._id,email:user.email,userName:user.userName,isVerified:user.isVerified}
             // console.log(payload);
             let key = process.env.JWT_KEY

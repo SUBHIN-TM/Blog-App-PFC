@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import nodemailer from 'nodemailer'
 
-export const otpSend = (email, otp) => {
+export const otpSend = (email, otp) => {  //BY RECIEVING EMAIL AND OTP ,USING NODE MAILER OTP SEND VIA EMAIL ID
     return new Promise(async (resolve, reject) => {
         try {
             console.log(" NodeMailer generation processing Please Wait", email, otp);
@@ -22,7 +22,7 @@ export const otpSend = (email, otp) => {
             };
 
             const info = await transporter.sendMail(message);
-            console.log(`message Sent Successfully to ${email}`,); //MESSAGE SEND TO USER EMAIL SUCCESSFULLY
+            console.log(`message Sent Successfully to ${email}`,);
             resolve({ mailSend: true })
 
         } catch (error) {

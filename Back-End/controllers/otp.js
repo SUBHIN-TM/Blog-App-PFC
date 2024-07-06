@@ -1,7 +1,7 @@
 import USER from "../models/user.js";
 import { otpSend } from "../util/otpSending.js";
 
-export const sendOtp=async(req,res)=>{
+export const sendOtp=async(req,res)=>{ //CONTROLLER FOR SENDING OTP WITH HELP OF NODEMAILER UTIL
     try {
         console.log("OTP Sending Section");
         // console.log(req.body);
@@ -27,7 +27,7 @@ export const sendOtp=async(req,res)=>{
 
 
 
-export const otpVerified=async(req,res)=>{
+export const otpVerified=async(req,res)=>{  //IF USER OTP VERIFIED NEED TO MARK AS VERIFID IN DATABASE
     try {
         console.log("OTP Verified Section");
         console.log(req.body);

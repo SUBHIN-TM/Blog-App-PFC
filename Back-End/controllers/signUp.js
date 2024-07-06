@@ -1,7 +1,7 @@
 import USER from "../models/user.js";
 import bcrypt from 'bcrypt'
 
-const signUp= async(req,res)=>{
+const signUp= async(req,res)=>{  //USER REGISTRATION CONTROLLER
     try {
         console.log("signUp Page");
         // console.log(req.body.userData);

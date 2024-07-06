@@ -1,6 +1,6 @@
 import POSTS from "../models/posts.js";
 
-const home=async(req,res)=>{
+const home=async(req,res)=>{  //APP HOME PAGE LOADS, IT WILL FETCH ALL THE AVALILABLE BLOG POSTS
     console.log("Home page");
     try {
         const response=await POSTS.find({}) .populate('userRef', 'userName email').sort({ createdAt: -1 });

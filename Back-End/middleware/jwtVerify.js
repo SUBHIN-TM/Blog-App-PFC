@@ -3,7 +3,7 @@ import env from "dotenv"
 env.config()
 
 
-const verify = (req, res, next) => {
+const verify = (req, res, next) => {  //CUSTOME MIDDLEWARE FOR TO VERIFY THE TOKEN ,IF THE TOKEN PRESENT IT WILL CONVERTED AND PUT IT TO THE REQ.TOKEN
     const authHeader = req.headers['authorization'];
     if (typeof authHeader !== 'undefined') {
         const tokenArray = authHeader.split(' ');

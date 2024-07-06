@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const postSchema=new mongoose.Schema({
+const postSchema=new mongoose.Schema({  //SCHEMA FOR USER POSTS
     title: { type: String, required: true },
     content: { type: String, required: true },
     userRef: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

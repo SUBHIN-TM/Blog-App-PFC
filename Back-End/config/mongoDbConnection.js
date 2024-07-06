@@ -2,6 +2,7 @@ import { mongoose } from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
+//MONGODB CONNECTION CONFIGURATION
 let connect=()=>{
   mongoose.connect(process.env.MONGOLINK, {
     socketTimeoutMS: 0, 

@@ -1,6 +1,7 @@
 import POSTS from "../models/posts.js";
+//ALL CRUD OPERATIONS OF POSTS ARE CONTROLLED BY HERE
 
-export const ownPosts=async (req,res)=>{
+export const ownPosts=async (req,res)=>{ //GETTING ALL USER MY POST SECTION TO DISPLAY IN MY POST PAGE
     try {
         console.log("my posts");
         // console.log(req.token);
@@ -14,7 +15,7 @@ export const ownPosts=async (req,res)=>{
     }
 }
 
-export const contentPost=async(req,res)=>{
+export const contentPost=async(req,res)=>{ //CREATING USER BLOG POST
     try {
         console.log("POST CONTENT");
         // console.log(req.token);
@@ -37,7 +38,7 @@ export const contentPost=async(req,res)=>{
 
 
 
-    export const deletePost=async(req,res)=>{
+    export const deletePost=async(req,res)=>{  //DELETING THE BLOG POST 
         try {
             console.log("Delete post");
             // console.log(req.params.id);
@@ -55,7 +56,7 @@ export const contentPost=async(req,res)=>{
 
 
 
-    export const editPost=async(req,res)=>{
+    export const editPost=async(req,res)=>{ //UPDATING BLOG POST
         try {
             console.log("edit post");
             // console.log(req.params.id);
