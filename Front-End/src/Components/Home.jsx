@@ -1,21 +1,24 @@
 import { useDispatch, useSelector } from "react-redux"
 import { fetchDetails } from "../redux/blogAppReducer"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { URL } from "../constants/links";
+import { ClipLoader } from 'react-spinners';
 
 
 const Home = () => {
   const allBlogs = useSelector((store) => store.BlogAppDataBase.blogPosts)
   const dispath = useDispatch()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     fetchAll()
   }, [])
 
   const fetchAll = async () => {
+    setLoading(true)
     try {
       const response = await axios.get(`${URL}`)
       if (response) {
@@ -26,16 +29,27 @@ const Home = () => {
     } catch (error) {
       console.error(error);
       toast.error('An error occurred during Fetching all posts. Please try again.');
+    } finally {
+      setLoading(false)
     }
   }
 
-  // console.log("redux", allBlogs);
- 
-  const formatUserName=(userName)=>{
-    if(userName){
+
+
+  if (loading || !allBlogs) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+         <ClipLoader color="#000000" size={100} />
+      </div>
+    )
+  }
+
+
+  const formatUserName = (userName) => {
+    if (userName) {
       return userName?.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
     }
-  
+
   }
 
   return (
