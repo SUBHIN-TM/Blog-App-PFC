@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { confirmAlert } from 'react-confirm-alert'; // Import react-confirm-alert module
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { ClipLoader } from 'react-spinners';
+
 
 const Myposts = () => {
     const [isModal, setIsmodal] = useState(false)  //STATE FOR MODAL OPEN AND CLOSE
@@ -18,6 +20,7 @@ const Myposts = () => {
     const [myPosts, setMyPosts] = useState("")
     const navigate = useNavigate()
     const [waiting, setWaiting] = useState(false) //THIS WILL TRIGGER EVERY AXIOS ACTIONS SO USEEFFECT CAN USE BY THIS LOGIC
+    const [loading,setLoading]=useState(false)  //THIS IS FOR TO DISPLAY SPINNERS WHILE FETCHING
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -30,6 +33,7 @@ const Myposts = () => {
 
     const fetchMyPosts = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`${URL}/myPosts`)
             if (response) {
                 setMyPosts(response.data.myPosts)
@@ -37,6 +41,8 @@ const Myposts = () => {
         } catch (error) {
             console.error(error);
             toast.error('An error occurred during Fetchin my posts. Please try again.');
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -170,6 +176,15 @@ const Myposts = () => {
                 setWaiting(false)
             }
         }
+    }
+
+    if(loading){
+        console.log("waiting");
+        return (
+            <div className="min-h-screen flex justify-center items-center">
+               <ClipLoader color="#000000" size={100} />
+            </div>
+          )
     }
 
     return (
