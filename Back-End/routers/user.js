@@ -17,9 +17,6 @@ router.post('/login',login);
 router.post('/contentPost',jwtVerify,contentPost);
 router.delete('/deletePost/:id',jwtVerify,deletePost);
 router.put('/editPost/:id',jwtVerify,editPost);
-
-
-
 router.get('/myPosts',jwtVerify,ownPosts);
 
 
