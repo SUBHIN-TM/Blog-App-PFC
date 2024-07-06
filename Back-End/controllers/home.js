@@ -4,7 +4,7 @@ const home=async(req,res)=>{
     console.log("Home page");
     try {
         const response=await POSTS.find({}) .populate('userRef', 'userName email').sort({ createdAt: -1 });
-        console.log(response);
+        // console.log(response);
         if(response){
             return res.status(200).json({allPosts:response})
         }     

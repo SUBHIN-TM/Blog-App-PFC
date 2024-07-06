@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 const signUp= async(req,res)=>{
     try {
         console.log("signUp Page");
-        console.log(req.body.userData);
+        // console.log(req.body.userData);
         const{email,password,userName}=req.body.userData
         const isMailExist=await USER.findOne({email})
         const isUserNameExist=await USER.findOne({userName})
@@ -20,7 +20,7 @@ const signUp= async(req,res)=>{
             password:encryptedPassword
          })
          const response=await userDetails.save();
-         console.log(response);
+        //  console.log(response);
          return res.status(201).json({ message: 'User registered successfully', user: response });
         }
     } catch (error) {

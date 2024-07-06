@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 const resetPassword=async(req,res)=>{
 try {
     console.log("reset password section");
-    console.log(req.body);
+    // console.log(req.body);
     const {email,newPassword}=req.body
     const encryptedPassword=await bcrypt.hash(newPassword,10)
     const response=await USER.findOneAndUpdate({email:email},

@@ -4,11 +4,11 @@ import { otpSend } from "../util/otpSending.js";
 export const sendOtp=async(req,res)=>{
     try {
         console.log("OTP Sending Section");
-        console.log(req.body);
+        // console.log(req.body);
         const {email,otp}=req.body
         
         const isRegisteredEmail=await USER.findOne({email})
-        console.log(isRegisteredEmail);
+        // console.log(isRegisteredEmail);
         if(!isRegisteredEmail){
             return res.status(404).json({ message: 'Email not registered' });
         }else{
