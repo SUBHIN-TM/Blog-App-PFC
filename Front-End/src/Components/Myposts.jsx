@@ -19,7 +19,6 @@ const Myposts = () => {
     const [contentError, setContentError] = useState("") //DISPLAY ERROR
     const [myPosts, setMyPosts] = useState("") //STORE THE USER POSTED BLOGS IN THIS STATE
     const [waiting, setWaiting] = useState(false) //THIS WILL TRIGGER EVERY AXIOS ACTIONS SO USEEFFECT CAN USE BY THIS LOGIC
-    const [loading,setLoading]=useState(false)  //THIS IS FOR TO DISPLAY SPINNERS WHILE FETCHING
     const navigate = useNavigate() 
 
     useEffect(() => {
@@ -34,7 +33,6 @@ const Myposts = () => {
 
     const fetchMyPosts = async () => { //FUNCTION FOR FETCHING LOGINED USER BLOGS
         try {
-            setLoading(true) //TO TRIGGER THE SPINNEERS
             const response = await axios.get(`${URL}/myPosts`)
             if (response) {
                 setMyPosts(response.data.myPosts)
@@ -42,8 +40,6 @@ const Myposts = () => {
         } catch (error) {
             console.error(error);
             toast.error('An error occurred during Fetchin my posts. Please try again.');
-        }finally{
-            setLoading(false)
         }
     }
 
@@ -180,13 +176,13 @@ const Myposts = () => {
         }
     }
 
-    // if(loading){ //IF LOADING IT WILL DISPLAY SPINNER
-    //     return (
-    //         <div className="min-h-screen flex justify-center items-center">
-    //            <ClipLoader color="#000000" size={100} />
-    //         </div>
-    //       )
-    // }
+    if(!myPosts){ //IF MYPOST DOES NOT FETCHED DATA IT WILL DISPLAY SPINNER
+        return (
+            <div className="min-h-screen flex justify-center items-center">
+               <ClipLoader color="#000000" size={100} />
+            </div>
+          )
+    }
 
     return (
         <div className='min-h-screen'>
